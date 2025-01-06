@@ -108,4 +108,89 @@ function actualizarTotal(){
     }).format(sumaTotal);
 }
 
+//boton guardar
+
+botonGuardar.addEventListener('click', () => {
+    const obligaciones = [];
+    listaObligaciones.querySelectorAll("li").forEach((item) => {
+        const checkbox = item.querySelector("input[type='checkbox']");
+        const spanFecha = item.querySelector("span:nth-child(2)").textContent.trim();
+        const spanDescripcion = item.querySelector("span:nth-child(3)").textContent.trim();
+        const spanValor = item.querySelector("span:nth-child(4)").textContent.trim();
+        obligaciones.push({
+            completado: checkbox.checked,
+            fecha: spanFecha,
+            descripcion: spanDescripcion,
+            valor: spanValor
+        });
+    });
+    localStorage.setItem("obligaciones", JSON.stringify(obligaciones));
+    localStorage.setItem("sumaTotal", sumaTotal);
+    alert("Cambios guardados con éxito.");
+});
+
+//cargar datos
+
+window.addEventListener('load', () => {
+    const obligacionesGuardadas = JSON.parse(localStorage.getItem("obligaciones")) || [];
+    sumaTotal = parseInt(localStorage.getItem("sumaTotal"), 10) || 0;
+    actualizarTotal();
+
+    obligacionesGuardadas.forEach((obligacion) => {
+        const nuevaObligacion = document.createElement("li");
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.checked = obligacion.completado;
+
+        const spanFecha = document.createElement("span");
+        spanFecha.textContent = obligacion.fecha;
+
+        const spanDescripcion = document.createElement("span");
+        spanDescripcion.textContent = obligacion.descripcion;
+
+        const spanValor = document.createElement("span");
+        spanValor.textContent = obligacion.valor;
+        const valorNumerico = parseInt(obligacion.valor.replace(/[^0-9]/g, ""), 10);
+
+        const botonEliminar = document.createElement("button");
+        botonEliminar.textContent = "Eliminar";
+
+        // Lógica de eventos similar a la del botón agregar
+        checkbox.addEventListener('change', () => {
+            if (checkbox.checked) {
+                sumaTotal -= valorNumerico;
+            } else {
+                sumaTotal += valorNumerico;
+            }
+            actualizarTotal();
+        });
+
+        botonEliminar.addEventListener('click', () => {
+            if (!checkbox.checked) {
+                sumaTotal -= valorNumerico;
+            }
+            listaObligaciones.removeChild(nuevaObligacion);
+            actualizarTotal();
+        });
+
+        nuevaObligacion.appendChild(checkbox);
+        nuevaObligacion.appendChild(spanFecha);
+        nuevaObligacion.appendChild(spanDescripcion);
+        nuevaObligacion.appendChild(spanValor);
+        nuevaObligacion.appendChild(botonEliminar);
+
+        listaObligaciones.appendChild(nuevaObligacion);
+
+        // Estilo tachado si estaba completado
+        if (checkbox.checked) {
+            spanFecha.style.textDecoration = "line-through";
+            spanDescripcion.style.textDecoration = "line-through";
+            spanValor.style.textDecoration = "line-through";
+            spanFecha.style.color = "gray";
+            spanDescripcion.style.color = "gray";
+            spanValor.style.color = "gray";
+        }
+    });
+});
 
