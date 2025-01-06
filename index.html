@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OBLIGACIONES FINANCIERAS</title>
+</head>
+<body>
+    <header>
+        <h1>OBLIGACIONES FINANCIERAS</h1>
+    </header>
+    <main>
+            <fieldset id = "registroObligacion">
+                <legend>REGISTRO DE OBLIGACIONES</legend>
+
+                <label for="lfecha">Fecha</label>
+                <input type="date" id="lfecha" name="fecha">
+                <br>
+                <label for="ldescripcion">Descripción</label>
+                <input type="text" id="ldescripcion" name="descripcion" placeholder="Describe obligación">
+                <br>
+                <label for="lvalor">Valor</label>
+                <input type="number" id="lvalor" name="valor">
+                <br>
+                <button id="buttonAgregar">Agregar</button>
+            </fieldset>
+
+            <hr>
+
+            <h2>OBLIGACIONES REGISTRADAS</h2>
+            <ul id="listaObligaciones">
+<!--                <li>
+                        <input type="checkbox" id="inputCheckbox">
+                        <span id="spanFecha">02/02/2025</span>
+                        <span id="spanDescripcion">Descripcion</span>
+                        <span id="spanValor">1000000</span>
+                        <button id="buttonEliminar">Eliminar</button>
+                    </li> -->
+            </ul>
+
+            <h3><strong>TOTAL :</strong></h3>
+            <p id="total"></p>
+            <br>
+            <button id="buttonGuardar"><strong>GUARDAR</strong></button>
+
+    </main>
+    <script src="app.js"></script>
+</body>
+</html>
