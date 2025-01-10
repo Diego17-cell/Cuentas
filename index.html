@@ -4,42 +4,99 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OBLIGACIONES FINANCIERAS</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    
     <header>
         <h1>OBLIGACIONES FINANCIERAS</h1>
     </header>
     <main>
-            <fieldset id = "registroObligacion">
-                <legend>REGISTRO DE OBLIGACIONES</legend>
 
-                <label for="lfecha">Fecha</label>
+        <table id="saldos" border="1">
+            <caption>
+                <h3>SALDOS</h3>
+            </caption>
+            
+            <thead>
+                <tr>
+                    <th>EFECTIVO</th>
+                    <th>CTA-AHORRO</th>
+                    <th>FIDUCIA</th>
+                </tr>
+            </thead>
+        
+            <tbody>
+                <tr>
+                    <td id="efectivo" data-valor="0"></td>
+                    <td id="cta-ahorro" data-valor="0"></td>
+                    <td id="fiducia" data-valor="0"></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><strong>TOTAL CAPITAL: </strong></td>
+                    <td id="saldo-total"></td>
+                </tr>
+            </tbody>
+        </table>
+        
+
+            <hr>
+
+            <fieldset  id="actualizar-saldos">
+                <legend><strong>ACTUALIZAR SALDOS</strong></legend>
+                <label for="cuenta-actualizar">Cuenta a actualizar: </label>
+                <select name="actualizar" id="cuenta-actualizar">
+                    <option value="efectivo">efectivo</option>
+                    <option value="cta-ahorro">cta-ahorro</option>
+                    <option value="fiducia">fiducia</option>
+                </select>
+                <label for="valor-actualizar">Valor a actualizar: </label>
+                <input id="valor-actualizar" type="number">
+                <button id="guardar-saldos">Actualizar saldo</button>
+            </fieldset>
+
+            <hr>
+
+            <fieldset id = "registroObligacion">
+                <legend><strong>REGISTRO DE OBLIGACIONES</strong></legend>
+
+                <label for="lfecha">Fecha:</label>
                 <input type="date" id="lfecha" name="fecha">
                 <br>
-                <label for="ldescripcion">Descripción</label>
+                <label for="ldescripcion">Descripción:</label>
                 <input type="text" id="ldescripcion" name="descripcion" placeholder="Describe obligación">
                 <br>
-                <label for="lvalor">Valor</label>
+                <label for="lvalor">Valor:</label>
                 <input type="number" id="lvalor" name="valor">
+                <br>
+                <label for="lcuenta">Salida:</label>
+                <select name="cuenta" id="lcuenta">
+                    <option value="efectivo">efectivo</option>
+                    <option value="cta-ahorro">cta-ahorro</option>
+                </select>
                 <br>
                 <button id="buttonAgregar">Agregar</button>
             </fieldset>
 
             <hr>
 
-            <h2>OBLIGACIONES REGISTRADAS</h2>
+            
+            <fieldset>
+                <legend><strong>OBLIGACIONES REGISTRADAS</strong></legend>
             <ul id="listaObligaciones">
 <!--                <li>
                         <input type="checkbox" id="inputCheckbox">
                         <span id="spanFecha">02/02/2025</span>
                         <span id="spanDescripcion">Descripcion</span>
                         <span id="spanValor">1000000</span>
+                        <span id="salida">ct-ahorro</span>
                         <button id="buttonEliminar">Eliminar</button>
                     </li> -->
             </ul>
 
-            <h3><strong>TOTAL :</strong></h3>
+            <h3><strong>TOTAL A PAGAR:</strong></h3>
             <p id="total"></p>
+            </fieldset>
             <br>
             <button id="buttonGuardar"><strong>GUARDAR</strong></button>
 

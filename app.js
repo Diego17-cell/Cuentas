@@ -1,19 +1,24 @@
+
 //variables
 const inputFecha = document.getElementById("lfecha"); 
 const inputDescripcion = document.getElementById("ldescripcion");
 const inputValor = document.getElementById("lvalor");
 const botonAgregar = document.getElementById("buttonAgregar");
 const listaObligaciones = document.getElementById("listaObligaciones");
-const botonGuardar = document.getElementById("buttonGuardar");
+const cuentaAActualizar = document.getElementById("cuenta-actualizar");
+const valorSaldo = document.getElementById("valor-actualizar");
+const botonActualizarSaldo = document.getElementById("guardar-saldos");
 const total = document.getElementById("total"); //mostrar total
 let sumaTotal = 0; //almacenar el total
+const botonGuardar = document.getElementById("buttonGuardar");
+
 
 //funcion agregar obligacion
 
 botonAgregar.addEventListener('click', ()=>{
 
         if(!inputFecha.value || !inputDescripcion.value || !inputValor.value){
-            alert("Por favor completa los campos");
+            alert("Por favor completa los campos para registrar la obligación");
             return;
         }else{
             const nuevaObligacion = document.createElement("li");
@@ -99,7 +104,7 @@ botonAgregar.addEventListener('click', ()=>{
     }
 );
 
-//funcion para actualizar total
+//funcion para actualizar deuda total
 function actualizarTotal(){
     total.textContent = new Intl.NumberFormat('es-CO', {
         style: 'currency',
@@ -108,89 +113,45 @@ function actualizarTotal(){
     }).format(sumaTotal);
 }
 
-//boton guardar
+//funcion para actualizar saldos totales
+const actualizarSaldosTotales = () => {
+    const efectivo = parseFloat(document.getElementById("efectivo").dataset.valor) || 0;
+    const ctaAhorro = parseFloat(document.getElementById("cta-ahorro").dataset.valor) || 0;
+    const fiducia = parseFloat(document.getElementById("fiducia").dataset.valor) || 0;
+    const saldoTotal = document.getElementById("saldo-total");
 
-botonGuardar.addEventListener('click', () => {
-    const obligaciones = [];
-    listaObligaciones.querySelectorAll("li").forEach((item) => {
-        const checkbox = item.querySelector("input[type='checkbox']");
-        const spanFecha = item.querySelector("span:nth-child(2)").textContent.trim();
-        const spanDescripcion = item.querySelector("span:nth-child(3)").textContent.trim();
-        const spanValor = item.querySelector("span:nth-child(4)").textContent.trim();
-        obligaciones.push({
-            completado: checkbox.checked,
-            fecha: spanFecha,
-            descripcion: spanDescripcion,
-            valor: spanValor
-        });
-    });
-    localStorage.setItem("obligaciones", JSON.stringify(obligaciones));
-    localStorage.setItem("sumaTotal", sumaTotal);
-    alert("Cambios guardados con éxito.");
-});
+    const sumaSaldos = efectivo + ctaAhorro + fiducia;
 
-//cargar datos
+    // Mostrar saldo total formateado
+    saldoTotal.textContent = new Intl.NumberFormat('es-CO', {
+        style: 'currency',
+        currency: 'COP',
+        minimumFractionDigits: 0
+    }).format(sumaSaldos);
+};
 
-window.addEventListener('load', () => {
-    const obligacionesGuardadas = JSON.parse(localStorage.getItem("obligaciones")) || [];
-    sumaTotal = parseInt(localStorage.getItem("sumaTotal"), 10) || 0;
-    actualizarTotal();
+//funcion para actualizar saldo en cuenta individual
+const actualizarSaldo = () => {
+    const cuenta = document.getElementById("cuenta-actualizar").value;
+    const valor = parseFloat(document.getElementById("valor-actualizar").value) || 0;
+    const celda = document.getElementById(cuenta);
 
-    obligacionesGuardadas.forEach((obligacion) => {
-        const nuevaObligacion = document.createElement("li");
+    // Actualizar el valor numérico en el atributo data-valor
+    celda.dataset.valor = (parseFloat(valor) || 0);
 
-        const checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.checked = obligacion.completado;
+    // Actualizar el contenido visible con formato
+    celda.textContent = new Intl.NumberFormat('es-CO', {
+        style: 'currency',
+        currency: 'COP',
+        minimumFractionDigits: 0
+    }).format(valor);
 
-        const spanFecha = document.createElement("span");
-        spanFecha.textContent = obligacion.fecha;
+    // Actualizar el saldo total
+    actualizarSaldosTotales();
+};
 
-        const spanDescripcion = document.createElement("span");
-        spanDescripcion.textContent = obligacion.descripcion;
+// Asignar el evento al botón
+document.getElementById("guardar-saldos").addEventListener("click", actualizarSaldo);
 
-        const spanValor = document.createElement("span");
-        spanValor.textContent = obligacion.valor;
-        const valorNumerico = parseInt(obligacion.valor.replace(/[^0-9]/g, ""), 10);
-
-        const botonEliminar = document.createElement("button");
-        botonEliminar.textContent = "Eliminar";
-
-        // Lógica de eventos similar a la del botón agregar
-        checkbox.addEventListener('change', () => {
-            if (checkbox.checked) {
-                sumaTotal -= valorNumerico;
-            } else {
-                sumaTotal += valorNumerico;
-            }
-            actualizarTotal();
-        });
-
-        botonEliminar.addEventListener('click', () => {
-            if (!checkbox.checked) {
-                sumaTotal -= valorNumerico;
-            }
-            listaObligaciones.removeChild(nuevaObligacion);
-            actualizarTotal();
-        });
-
-        nuevaObligacion.appendChild(checkbox);
-        nuevaObligacion.appendChild(spanFecha);
-        nuevaObligacion.appendChild(spanDescripcion);
-        nuevaObligacion.appendChild(spanValor);
-        nuevaObligacion.appendChild(botonEliminar);
-
-        listaObligaciones.appendChild(nuevaObligacion);
-
-        // Estilo tachado si estaba completado
-        if (checkbox.checked) {
-            spanFecha.style.textDecoration = "line-through";
-            spanDescripcion.style.textDecoration = "line-through";
-            spanValor.style.textDecoration = "line-through";
-            spanFecha.style.color = "gray";
-            spanDescripcion.style.color = "gray";
-            spanValor.style.color = "gray";
-        }
-    });
-});
-
+// Llamar la función inicial para mostrar los saldos con formato
+actualizarSaldosTotales();
