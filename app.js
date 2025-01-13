@@ -23,6 +23,9 @@ botonAgregar.addEventListener('click', ()=>{
         }else{
             const nuevaObligacion = document.createElement("li");
 
+            //guardar la cuenta seleccionada como un nuevo atributo de los datos
+            nuevaObligacion.dataset.cuenta = inputSalida.value // Capturamos el valor actual del inputSalida
+
             const checkbox = document.createElement("input");
             checkbox.type = "checkbox";
 
@@ -51,25 +54,39 @@ botonAgregar.addEventListener('click', ()=>{
             actualizarTotal();
             
 
-            //Evento para tachar texto una vez completada la obligacion o sumar al total
-            checkbox.addEventListener('change', ()=>{
-                    if(checkbox.checked){
-                        nuevaObligacion.style.textDecoration = "line-through";
-                        nuevaObligacion.style.color = "gray";
+            // Modificación en el evento del checkbox
+            checkbox.addEventListener('change', () => {
+                const cuentaAsociada = nuevaObligacion.dataset.cuenta;
+                if (checkbox.checked) {
+                    nuevaObligacion.style.textDecoration = "line-through";
+                    nuevaObligacion.style.color = "gray";
 
-                        sumaTotal -= valorNumerico;
+                    sumaTotal -= valorNumerico;
 
+                    // Restar el valor de la obligación de la cuenta correspondiente
+                    restarObligacionDeSaldo(cuentaAsociada, valorNumerico);
+                } else {
+                    nuevaObligacion.style.textDecoration = "none";
+                    nuevaObligacion.style.color = "black";
 
-                    }else{
-                        nuevaObligacion.style.textDecoration = "none";
-                        nuevaObligacion.style.color = "black";
+                    sumaTotal += valorNumerico;
 
-                        sumaTotal += valorNumerico;
+                    // Volver a sumar el valor de la obligación al saldo (revertir la resta)
+                    const celda = document.getElementById(cuentaAsociada);
+                    const saldoActual = parseFloat(celda.dataset.valor) || 0;
+                    const nuevoSaldo = saldoActual + valorNumerico;
 
-                    }
-                    actualizarTotal();
+                    celda.dataset.valor = nuevoSaldo;
+                    celda.textContent = new Intl.NumberFormat('es-CO', {
+                        style: 'currency',
+                        currency: 'COP',
+                        minimumFractionDigits: 0
+                    }).format(nuevoSaldo);
+
+                    actualizarSaldosTotales();
                 }
-            );
+                actualizarTotal();
+            });
 
             //Evento para el boton eliminar
             botonEliminar.addEventListener('click', () =>{
@@ -96,6 +113,7 @@ botonAgregar.addEventListener('click', ()=>{
             inputDescripcion.value = "";
             inputValor.value = "";
             inputSalida.value = "";
+            
         }
     }
 );
@@ -151,3 +169,25 @@ botonActualizarSaldo.addEventListener("click", actualizarSaldo);
 
 // Llamar la función inicial para mostrar los saldos con formato
 actualizarSaldosTotales();
+
+// Función para restar el valor de la obligación de la cuenta correspondiente
+const restarObligacionDeSaldo = (cuenta, valor) => {
+    const celda = document.getElementById(cuenta);
+    const saldoActual = parseFloat(celda.dataset.valor) || 0;
+
+    // Restar el valor de la obligación al saldo actual
+    const nuevoSaldo = saldoActual - valor;
+
+    // Actualizar el valor numérico en el atributo data-valor
+    celda.dataset.valor = nuevoSaldo;
+
+    // Actualizar el contenido visible con formato
+    celda.textContent = new Intl.NumberFormat('es-CO', {
+        style: 'currency',
+        currency: 'COP',
+        minimumFractionDigits: 0
+    }).format(nuevoSaldo);
+
+    // Actualizar el saldo total
+    actualizarSaldosTotales();
+};
