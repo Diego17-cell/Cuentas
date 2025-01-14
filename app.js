@@ -50,7 +50,7 @@ botonAgregar.addEventListener('click', ()=>{
             botonEliminar.textContent = "Eliminar";
 
             //Sumar valor al total
-            sumaTotal += valorNumerico;
+            sumaTotal -= valorNumerico;
             actualizarTotal();
             
 
@@ -61,7 +61,7 @@ botonAgregar.addEventListener('click', ()=>{
                     nuevoMovimiento.style.textDecoration = "line-through";
                     nuevoMovimiento.style.color = "gray";
 
-                    sumaTotal -= valorNumerico;
+                    sumaTotal += valorNumerico;
 
                     // Restar el valor de la obligación de la cuenta correspondiente
                     restarObligacionDeSaldo(cuentaAsociada, valorNumerico);
@@ -69,12 +69,12 @@ botonAgregar.addEventListener('click', ()=>{
                     nuevoMovimiento.style.textDecoration = "none";
                     nuevoMovimiento.style.color = "black";
 
-                    sumaTotal += valorNumerico;
+                    sumaTotal -= valorNumerico;
 
                     // Volver a sumar el valor de la obligación al saldo (revertir la resta)
                     const celda = document.getElementById(cuentaAsociada);
                     const saldoActual = parseFloat(celda.dataset.valor) || 0;
-                    const nuevoSaldo = saldoActual + valorNumerico;
+                    const nuevoSaldo = saldoActual - valorNumerico;
 
                     celda.dataset.valor = nuevoSaldo;
                     celda.textContent = new Intl.NumberFormat('es-CO', {
@@ -91,7 +91,7 @@ botonAgregar.addEventListener('click', ()=>{
             //Evento para el boton eliminar
             botonEliminar.addEventListener('click', () =>{
                     if(!checkbox.checked){
-                        sumaTotal -= valorNumerico;
+                        sumaTotal += valorNumerico;
                     };
                     listaMovimientos.removeChild(nuevoMovimiento);
                     actualizarTotal();
@@ -162,6 +162,7 @@ const actualizarSaldo = () => {
 
     // Actualizar el saldo total
     actualizarSaldosTotales();
+    valorSaldo.value = "";
 };
 
 // Asignar el evento al botón
@@ -176,7 +177,7 @@ const restarObligacionDeSaldo = (cuenta, valor) => {
     const saldoActual = parseFloat(celda.dataset.valor) || 0;
 
     // Restar el valor de la obligación al saldo actual
-    const nuevoSaldo = saldoActual - valor;
+    const nuevoSaldo = saldoActual + valor;
 
     // Actualizar el valor numérico en el atributo data-valor
     celda.dataset.valor = nuevoSaldo;
