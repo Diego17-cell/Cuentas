@@ -5,7 +5,7 @@ const inputDescripcion = document.getElementById("ldescripcion");
 const inputValor = document.getElementById("lvalor");
 const inputSalida = document.getElementById("lcuenta");
 const botonAgregar = document.getElementById("buttonAgregar");
-const listaObligaciones = document.getElementById("listaObligaciones");
+const listaMovimientos = document.getElementById("listaMovimientos");
 const cuentaAActualizar = document.getElementById("cuenta-actualizar");
 const valorSaldo = document.getElementById("valor-actualizar");
 const botonActualizarSaldo = document.getElementById("guardar-saldos");
@@ -13,18 +13,18 @@ const total = document.getElementById("total"); //mostrar total
 let sumaTotal = 0; //almacenar el total
 const botonGuardar = document.getElementById("buttonGuardar");
 
-//funcion agregar obligacion
+//funcion agregar nuevo Movimiento
 
 botonAgregar.addEventListener('click', ()=>{
 
         if(!inputFecha.value || !inputDescripcion.value || !inputValor.value || !inputSalida.value){
-            alert("Por favor completa los campos para registrar la obligación");
+            alert("Por favor completa los campos para registrar el movimiento");
             return;
         }else{
-            const nuevaObligacion = document.createElement("li");
+            const nuevoMovimiento = document.createElement("li");
 
             //guardar la cuenta seleccionada como un nuevo atributo de los datos
-            nuevaObligacion.dataset.cuenta = inputSalida.value // Capturamos el valor actual del inputSalida
+            nuevoMovimiento.dataset.cuenta = inputSalida.value // Capturamos el valor actual del inputSalida
 
             const checkbox = document.createElement("input");
             checkbox.type = "checkbox";
@@ -56,18 +56,18 @@ botonAgregar.addEventListener('click', ()=>{
 
             // Modificación en el evento del checkbox
             checkbox.addEventListener('change', () => {
-                const cuentaAsociada = nuevaObligacion.dataset.cuenta;
+                const cuentaAsociada = nuevoMovimiento.dataset.cuenta;
                 if (checkbox.checked) {
-                    nuevaObligacion.style.textDecoration = "line-through";
-                    nuevaObligacion.style.color = "gray";
+                    nuevoMovimiento.style.textDecoration = "line-through";
+                    nuevoMovimiento.style.color = "gray";
 
                     sumaTotal -= valorNumerico;
 
                     // Restar el valor de la obligación de la cuenta correspondiente
                     restarObligacionDeSaldo(cuentaAsociada, valorNumerico);
                 } else {
-                    nuevaObligacion.style.textDecoration = "none";
-                    nuevaObligacion.style.color = "black";
+                    nuevoMovimiento.style.textDecoration = "none";
+                    nuevoMovimiento.style.color = "black";
 
                     sumaTotal += valorNumerico;
 
@@ -93,20 +93,20 @@ botonAgregar.addEventListener('click', ()=>{
                     if(!checkbox.checked){
                         sumaTotal -= valorNumerico;
                     };
-                    listaObligaciones.removeChild(nuevaObligacion);
+                    listaMovimientos.removeChild(nuevoMovimiento);
                     actualizarTotal();
                 }
             );
 
             //añadir elementos hijos ul -> li -> ...            
-            nuevaObligacion.appendChild(checkbox);
-            nuevaObligacion.appendChild(spanFecha);
-            nuevaObligacion.appendChild(spanDescripcion);
-            nuevaObligacion.appendChild(spanValor);
-            nuevaObligacion.appendChild(spanSalida);
-            nuevaObligacion.appendChild(botonEliminar);
+            nuevoMovimiento.appendChild(checkbox);
+            nuevoMovimiento.appendChild(spanFecha);
+            nuevoMovimiento.appendChild(spanDescripcion);
+            nuevoMovimiento.appendChild(spanValor);
+            nuevoMovimiento.appendChild(spanSalida);
+            nuevoMovimiento.appendChild(botonEliminar);
 
-            listaObligaciones.appendChild(nuevaObligacion);
+            listaMovimientos.appendChild(nuevoMovimiento);
 
             //limpiar campos
             inputFecha.value = "";

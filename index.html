@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OBLIGACIONES FINANCIERAS</title>
+    <title>MOVIMIENTOS FINANCIEROS</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     
     <header>
-        <h1>OBLIGACIONES FINANCIERAS</h1>
+        <h1>MOVIMIENTOS FINANCIEROS</h1>
     </header>
     <main>
 
@@ -58,40 +58,33 @@
             <hr>
 
             <fieldset id = "registroObligacion">
-                <legend><strong>REGISTRO DE OBLIGACIONES</strong></legend>
+                <legend><strong>REGISTRO DE MOVIMIENTOS</strong></legend>
 
                 <label for="lfecha">Fecha:</label>
                 <input type="date" id="lfecha" name="fecha">
-                <br>
+                
                 <label for="ldescripcion">Descripción:</label>
                 <input type="text" id="ldescripcion" name="descripcion" placeholder="Describe obligación">
-                <br>
+                
                 <label for="lvalor">Valor:</label>
                 <input type="number" id="lvalor" name="valor">
-                <br>
-                <label for="lcuenta">Salida:</label>
+                
+                <label for="lcuenta">Cuenta:</label>
                 <select name="cuenta" id="lcuenta">
                     <option value="efectivo">efectivo</option>
                     <option value="cta-ahorro">cta-ahorro</option>
                 </select>
-                <br>
+                
                 <button id="buttonAgregar">Agregar</button>
             </fieldset>
 
             <hr>
 
             
-            <fieldset>
-                <legend><strong>OBLIGACIONES REGISTRADAS</strong></legend>
-            <ul id="listaObligaciones">
-<!--                <li>
-                        <input type="checkbox" id="inputCheckbox">
-                        <span id="spanFecha">02/02/2025</span>
-                        <span id="spanDescripcion">Descripcion</span>
-                        <span id="spanValor">1000000</span>
-                        <span id="salida">cta-ahorro</span>
-                        <button id="buttonEliminar">Eliminar</button>
-                    </li> -->
+            <fieldset id="movimientos">
+                <legend><strong>MOVIMIENTOS REGISTRADOS</strong></legend>
+            <ul id="listaMovimientos">
+
             </ul>
 
             <h3><strong>TOTAL A PAGAR:</strong></h3>
