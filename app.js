@@ -30,21 +30,21 @@ botonAgregar.addEventListener('click', ()=>{
             checkbox.type = "checkbox";
 
             const spanFecha = document.createElement("span");
-            spanFecha.textContent = `   ${inputFecha.value}   |`;
+            spanFecha.textContent = inputFecha.value;
 
             const spanDescripcion = document.createElement("span");
-            spanDescripcion.textContent = `   ${inputDescripcion.value}   |   `;
+            spanDescripcion.textContent = inputDescripcion.value;
 
             const spanValor = document.createElement("span");
             const valorNumerico = parseInt(inputValor.value, 10);
-            spanValor.textContent = `${new Intl.NumberFormat('es-CO', {
+            spanValor.textContent = new Intl.NumberFormat('es-CO', {
                 style: 'currency',
                 currency: 'COP',
                 minimumFractionDigits: 0
-            }).format(valorNumerico)}   |`;
+            }).format(valorNumerico);
 
             const spanSalida = document.createElement("span");
-            spanSalida.textContent = `  ${inputSalida.value} |   `;
+            spanSalida.textContent = inputSalida.value;
 
             const botonEliminar = document.createElement("button");
             botonEliminar.textContent = "Eliminar";
